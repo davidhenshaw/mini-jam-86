@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 392442425}
   - component: {fileID: 392442426}
   - component: {fileID: 392442427}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ball Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -320,7 +320,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -528,7 +528,7 @@ Rigidbody2D:
   m_GameObject: {fileID: 527377850}
   m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
@@ -730,6 +730,7 @@ GameObject:
   - component: {fileID: 1128622820}
   - component: {fileID: 1128622819}
   - component: {fileID: 1128622823}
+  - component: {fileID: 1128622821}
   m_Layer: 9
   m_Name: Ball
   m_TagString: Untagged
@@ -749,7 +750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92ab7c0932aad51428e3f0cedc57961f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: {x: 0, y: -4.14, z: 1.5}
+  velocity: {x: 0.85, y: -2.23, z: 1.5}
   GRAVITY: 5
   bounceCoef: 0.84
   frictionCoef: 0
@@ -761,7 +762,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1128622818}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.58, y: 3.18, z: 0}
+  m_LocalPosition: {x: -1.36, y: 1.33, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 392442424}
@@ -769,6 +770,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &1128622821
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1128622818}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 1
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!114 &1128622823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -783,7 +805,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _depthCollider: {fileID: 0}
   _heightCollider: {fileID: 0}
-  _rigidbody: {fileID: 0}
 --- !u!1 &1133485478
 GameObject:
   m_ObjectHideFlags: 0
@@ -795,7 +816,6 @@ GameObject:
   - component: {fileID: 1133485479}
   - component: {fileID: 1133485480}
   - component: {fileID: 1133485482}
-  - component: {fileID: 1133485481}
   m_Layer: 8
   m_Name: Ball Shadow
   m_TagString: Untagged
@@ -867,27 +887,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!50 &1133485481
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1133485478}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 1
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!58 &1133485482
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1006,7 +1005,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.011402607, y: 0.26262498}
@@ -1101,7 +1100,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _depthCollider: {fileID: 0}
   _heightCollider: {fileID: 0}
-  _rigidbody: {fileID: 0}
 --- !u!1 &1643540273
 GameObject:
   m_ObjectHideFlags: 0
