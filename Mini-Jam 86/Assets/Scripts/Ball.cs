@@ -23,40 +23,16 @@ namespace metakazz{
             _beuCollider = GetComponent<BEUCollider>();
         }
 
-        // Start is called before the first frame update
-        void Start()
+        void ResolveCollision(Collision2D collision)
         {
-            _beuCollider.collided += onCollision;
-        }
-
-        private void onCollision(Collider2D other)
-        {
-            //If you collide AND you're moving toward the collider that you hit,
-            // then you bounce 
-
-            Vector3 normal = GetCollisionNormal(other);
-            var dot = Vector3.Dot(normal, velocity);
-
-            if(dot < 0) //The ball's velocity is pointed toward the other collider
+            Vector3 avgNormal = Vector3.zero;
+            foreach (ContactPoint2D contact in collision.contacts)
             {
-                Bounce(normal);
-                //Bounce(Vector3.up);
+                avgNormal += (Vector3)contact.normal;
             }
-        }
+            avgNormal.Normalize();
 
-
-        Vector3 GetCollisionNormal(Collider2D other)
-        {
-            ContactPoint2D[] points = new ContactPoint2D[3];
-            var depthCol = _beuCollider.DepthCollider;
-
-            Vector3 average = Vector3.zero;
-            foreach (ContactPoint2D contact in points)
-            {
-                average += depthCol.transform.position - (Vector3)contact.point;
-            }
-
-            return average.normalized;
+            Bounce(avgNormal);
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -66,14 +42,7 @@ namespace metakazz{
 
             if(_beuCollider.IsTouchingHeight(otherBeuCol))
             {
-                Vector3 average = Vector3.zero;
-                foreach (ContactPoint2D contact in collision.contacts)
-                {
-                    average += (Vector3)contact.normal;
-                }
-                average.Normalize();
-
-                Bounce(average);
+                ResolveCollision(collision);
             }
         }
 
