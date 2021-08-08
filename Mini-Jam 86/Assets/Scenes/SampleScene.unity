@@ -420,6 +420,7 @@ GameObject:
   - component: {fileID: 527377851}
   - component: {fileID: 527377852}
   - component: {fileID: 527377853}
+  - component: {fileID: 527377854}
   m_Layer: 8
   m_Name: net
   m_TagString: Untagged
@@ -501,7 +502,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.011402607, y: -0.21}
@@ -517,6 +518,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 4.671836, y: 0.12274408}
   m_EdgeRadius: 0
+--- !u!50 &527377854
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 527377850}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &626623619
 GameObject:
   m_ObjectHideFlags: 0
@@ -707,7 +729,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1128622820}
   - component: {fileID: 1128622819}
-  - component: {fileID: 1128622821}
   - component: {fileID: 1128622823}
   m_Layer: 9
   m_Name: Ball
@@ -728,7 +749,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92ab7c0932aad51428e3f0cedc57961f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocity: {x: 0, y: -3.03, z: 1.5}
+  velocity: {x: 0, y: -4.14, z: 1.5}
   GRAVITY: 5
   bounceCoef: 0.84
   frictionCoef: 0
@@ -740,7 +761,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1128622818}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.58, y: 3.18, z: 1.2}
+  m_LocalPosition: {x: 0.58, y: 3.18, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 392442424}
@@ -748,27 +769,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &1128622821
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1128622818}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!114 &1128622823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -783,6 +783,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _depthCollider: {fileID: 0}
   _heightCollider: {fileID: 0}
+  _rigidbody: {fileID: 0}
 --- !u!1 &1133485478
 GameObject:
   m_ObjectHideFlags: 0
@@ -793,6 +794,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1133485479}
   - component: {fileID: 1133485480}
+  - component: {fileID: 1133485482}
   - component: {fileID: 1133485481}
   m_Layer: 8
   m_Name: Ball Shadow
@@ -852,7 +854,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1237962531
-  m_SortingLayer: 1
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: ae67445fd1d402440beb1ad9baaacd69, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -865,8 +867,29 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &1133485481
-BoxCollider2D:
+--- !u!50 &1133485481
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1133485478}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 1
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!58 &1133485482
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -875,22 +898,12 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.09, y: 0.09}
-    newSize: {x: 0.09, y: 0.09}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.09, y: 0.09}
-  m_EdgeRadius: 0
+  m_Radius: 0.045
 --- !u!1 &1299703253
 GameObject:
   m_ObjectHideFlags: 0
@@ -975,7 +988,6 @@ GameObject:
   - component: {fileID: 1571329466}
   - component: {fileID: 1571329465}
   - component: {fileID: 1571329464}
-  - component: {fileID: 1571329463}
   - component: {fileID: 1571329467}
   m_Layer: 9
   m_Name: Court
@@ -984,27 +996,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!50 &1571329463
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1571329462}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!61 &1571329464
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1067,8 +1058,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1322934201
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 9b3e7d944819d5d438954563730c4fb5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1110,6 +1101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _depthCollider: {fileID: 0}
   _heightCollider: {fileID: 0}
+  _rigidbody: {fileID: 0}
 --- !u!1 &1643540273
 GameObject:
   m_ObjectHideFlags: 0

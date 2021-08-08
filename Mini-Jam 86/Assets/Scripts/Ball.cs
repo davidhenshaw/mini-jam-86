@@ -34,29 +34,47 @@ namespace metakazz{
             //If you collide AND you're moving toward the collider that you hit,
             // then you bounce 
 
-            Vector3 offset = GetOffsetDirection(other);
-            var dot = Vector3.Dot(offset, velocity);
+            Vector3 normal = GetCollisionNormal(other);
+            var dot = Vector3.Dot(normal, velocity);
 
-            if(dot > 0) //The ball's velocity is pointed toward the other collider
+            if(dot < 0) //The ball's velocity is pointed toward the other collider
             {
-                Bounce(offset);
+                Bounce(normal);
                 //Bounce(Vector3.up);
             }
         }
 
-        Vector3 GetOffsetDirection(Collider2D other)
+
+        Vector3 GetCollisionNormal(Collider2D other)
         {
             ContactPoint2D[] points = new ContactPoint2D[3];
             var depthCol = _beuCollider.DepthCollider;
-            depthCol.GetContacts(points);
 
             Vector3 average = Vector3.zero;
-            foreach (ContactPoint2D point in points)
+            foreach (ContactPoint2D contact in points)
             {
-                average += depthCol.transform.position - (Vector3)point.point;
+                average += depthCol.transform.position - (Vector3)contact.point;
             }
 
             return average.normalized;
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            var otherBeuCol = collision.collider.GetComponentInParent<BEUCollider>();
+            var depthCol = _beuCollider.DepthCollider;
+
+            if(_beuCollider.IsTouchingHeight(otherBeuCol))
+            {
+                Vector3 average = Vector3.zero;
+                foreach (ContactPoint2D contact in collision.contacts)
+                {
+                    average += (Vector3)contact.normal;
+                }
+                average.Normalize();
+
+                Bounce(average);
+            }
         }
 
         // Update is called once per frame
