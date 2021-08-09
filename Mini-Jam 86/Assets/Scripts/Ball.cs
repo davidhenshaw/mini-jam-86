@@ -9,7 +9,7 @@ namespace metakazz{
         Transform _shadow;
         BEUCollider _beuCollider;
 
-        [SerializeField] Vector3 velocity = Vector3.zero;
+        [SerializeField] Vector3 _velocity = Vector3.zero;
         public float GRAVITY = 5;
         public float bounceCoef = 0.89f;
         public float frictionCoef = 0.12f;
@@ -24,6 +24,14 @@ namespace metakazz{
         }
 
         void ResolveCollision(Collision2D collision)
+        {
+            if (collision.collider.GetComponent<Racket>())
+                return;
+
+            DefaultCollision(collision);
+        }
+
+        void DefaultCollision(Collision2D collision)
         {
             Vector3 avgNormal = Vector3.zero;
             foreach (ContactPoint2D contact in collision.contacts)
@@ -56,10 +64,10 @@ namespace metakazz{
 
         void VerticalMovement()
         {
-            var dz = (velocity.z) * Time.deltaTime;
+            var dz = (_velocity.z) * Time.deltaTime;
             transform.Translate(0, 0, dz);
 
-            velocity -= Vector3.forward * GRAVITY * Time.deltaTime;
+            _velocity -= Vector3.forward * GRAVITY * Time.deltaTime;
 
             if(transform.position.z < 0 )
             {
@@ -70,7 +78,7 @@ namespace metakazz{
 
         void HorizontalMovement()
         {
-            var dPos = velocity * Time.deltaTime;
+            var dPos = _velocity * Time.deltaTime;
             transform.Translate(dPos.x, dPos.y, 0);
 
             //float fricX = (velocity * frictionCoef).x;
@@ -81,7 +89,12 @@ namespace metakazz{
 
         void Bounce(Vector3 normal)
         {
-            velocity = Vector3.Reflect(velocity, normal.normalized) * bounceCoef;
+            _velocity = Vector3.Reflect(_velocity, normal.normalized) * bounceCoef;
+        }
+
+        public void Launch(Vector3 impulse)
+        {
+            _velocity += impulse;
         }
 
         void ApplyShadow()

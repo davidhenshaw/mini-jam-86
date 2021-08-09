@@ -8,7 +8,6 @@ namespace metakazz{
     {
         [SerializeField] Transform toTeleport;
         [SerializeField] Camera mainCamera;
-        public bool isHorizontal;
 
         private void Awake()
         {
@@ -18,27 +17,40 @@ namespace metakazz{
             }
         }
 
-        // Start is called before the first frame update
-        void Start()
-        {
-            
-        }
-
         // Update is called once per frame
         void Update()
         {
+            var viewPos = mainCamera.WorldToViewportPoint(toTeleport.position);
 
+            if(viewPos.y > 1)
+            {
+                TeleportObject(new Vector2(viewPos.x, 0));
+                return;
+            }
+
+            if(viewPos.y < 0)
+            {
+                TeleportObject(new Vector2(viewPos.x, 1));
+                return;
+            }
+
+            if (viewPos.x > 1)
+            {
+                TeleportObject(new Vector2(0, viewPos.y));
+                return;
+            }
+
+            if (viewPos.x < 0)
+            {
+                TeleportObject(new Vector2(1, viewPos.y));
+                return;
+            }
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        void TeleportObject(Vector2 viewportPos)
         {
-            TeleportObject();
-        }
-
-        void TeleportObject()
-        {
-            var pos = toTeleport.position;
-            toTeleport.position = isHorizontal ? new Vector3(pos.x, -pos.y, pos.z) : new Vector3(-pos.x, pos.y, pos.z);
+            var worldPos = mainCamera.ViewportToWorldPoint(viewportPos);
+            toTeleport.position = new Vector3(worldPos.x, worldPos.y, toTeleport.position.z);
             Debug.Log("Teleported object");
         }
     }

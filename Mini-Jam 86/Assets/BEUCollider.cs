@@ -34,6 +34,18 @@ namespace metakazz{
             CheckCollision();
         }
 
+        private void OnEnable()
+        {
+            _depthCollider.enabled = true;
+            _heightCollider.enabled = true;
+        }
+
+        private void OnDisable()
+        {
+            _depthCollider.enabled = false;
+            _heightCollider.enabled = false;
+        }
+
         public bool IsTouchingHeight(BEUCollider other)
         {
             //Collider2D[] result = new Collider2D[1];
