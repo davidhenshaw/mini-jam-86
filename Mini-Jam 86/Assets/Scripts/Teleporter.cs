@@ -51,7 +51,6 @@ namespace metakazz{
         {
             var worldPos = mainCamera.ViewportToWorldPoint(viewportPos);
             toTeleport.position = new Vector3(worldPos.x, worldPos.y, toTeleport.position.z);
-            Debug.Log("Teleported object");
         }
     }
 }

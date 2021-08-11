@@ -1,13 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace metakazz{
     public class Racket : MonoBehaviour
     {
-        float hitPower = 3;
         BEUCollider _beuCollider;
-        [SerializeField] Vector3 hitDir;
+        [SerializeField] float _hitPower = 3;
+        [SerializeField] Vector3 _hitDir;
+        bool _alreadyHit = false;
+
+        public static event Action<Racket> BallHit;
 
         private void Awake()
         {
@@ -22,6 +26,8 @@ namespace metakazz{
             if (_beuCollider.IsTouchingHeight(otherBeuCol))
             {
                 ResolveCollision(collision);
+                BallHit?.Invoke(this);
+                _alreadyHit = true;
             }
         }
 
@@ -30,10 +36,17 @@ namespace metakazz{
             var otherBeuCol = collision.collider.GetComponentInParent<BEUCollider>();
             var depthCol = _beuCollider.DepthCollider;
 
-            if (_beuCollider.IsTouchingHeight(otherBeuCol))
+            if (_beuCollider.IsTouchingHeight(otherBeuCol) && !_alreadyHit)
             {
                 ResolveCollision(collision);
+                BallHit?.Invoke(this);
+                _alreadyHit = true;
             }
+        }
+
+        private void OnCollisionExit2D(Collision2D collision)
+        {
+            _alreadyHit = false;
         }
 
         void ResolveCollision(Collision2D collision)
@@ -49,7 +62,7 @@ namespace metakazz{
             }
             avgNormal.Normalize();
 
-            ball.Launch( (-1 * avgNormal) + hitDir * 3);
+            ball.Launch( (-1 * avgNormal) + _hitDir.normalized * _hitPower);
         }
 
         public void SetCollidersEnabled(bool value)

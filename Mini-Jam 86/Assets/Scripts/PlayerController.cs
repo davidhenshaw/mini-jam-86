@@ -9,7 +9,8 @@ namespace metakazz{
         Rigidbody2D _rigidbody;
         Racket _racket;
         Vector2 _direction;
-        float moveSpeed = 2;
+
+        [SerializeField] float moveSpeed = 2;
         [SerializeField] float moveAccel = 10;
         [SerializeField] float moveDecel = 7;
         float minVelocity = 0.01f;
@@ -55,9 +56,18 @@ namespace metakazz{
         {
             if(value.started)
             {
-                Debug.Log("Swing");
                 StartCoroutine(ActivateRacket(1));
             }
+        }
+
+        public void OnAimAxis(InputAction.CallbackContext value)
+        {
+
+        }
+
+        public void OnAimPosition(InputAction.CallbackContext value)
+        {
+            var rawPos = value.ReadValue<Vector2>();
         }
 
         IEnumerator ActivateRacket(float duration)

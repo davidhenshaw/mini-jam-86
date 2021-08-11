@@ -1,18 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using System;
 
 namespace metakazz{
     public class Ball : MonoBehaviour
     {
+        public static event Action<Ball> Bounced;
+
         Transform _sprite;
         Transform _shadow;
         BEUCollider _beuCollider;
 
         [SerializeField] Vector3 _velocity = Vector3.zero;
+        public Vector3 Velocity => _velocity;
         public float GRAVITY = 5;
         public float bounceCoef = 0.89f;
         public float frictionCoef = 0.12f;
+
+        float _bounceThreshold = 0.5f;
 
         private void Awake()
         {
@@ -72,8 +79,22 @@ namespace metakazz{
             if(transform.position.z < 0 )
             {
                 transform.position = new Vector3(transform.position.x, transform.position.y, 0);
-                Bounce(Vector3.back);
+                if(ShouldBounce())
+                {
+                    Bounce(Vector3.back);
+                    Bounced?.Invoke(this);
+                }
+                else
+                {
+                    _velocity = new Vector3(_velocity.x, _velocity.y, 0);
+                }
+
             }
+        }
+
+        bool ShouldBounce()
+        {
+            return (Mathf.Abs(_velocity.z) > _bounceThreshold);
         }
 
         void HorizontalMovement()
@@ -102,5 +123,6 @@ namespace metakazz{
             float yOffset = transform.position.z;
             _sprite.localPosition = new Vector2(0, yOffset);
         }
+
     }
 }

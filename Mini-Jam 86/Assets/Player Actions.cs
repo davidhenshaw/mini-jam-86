@@ -41,6 +41,14 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Value"",
+                    ""id"": ""3b29ea8d-55e4-4103-8125-da6ce1333539"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -164,6 +172,28 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                     ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f5f9601a-e5f2-4e82-874b-0b8685a398da"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cfea4f00-a434-48a2-aad4-17f73197be19"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -203,6 +233,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         m_PlayerControls_Swing = m_PlayerControls.FindAction("Swing", throwIfNotFound: true);
         m_PlayerControls_Movement = m_PlayerControls.FindAction("Movement", throwIfNotFound: true);
         m_PlayerControls_Sprint = m_PlayerControls.FindAction("Sprint", throwIfNotFound: true);
+        m_PlayerControls_Aim = m_PlayerControls.FindAction("Aim", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -255,6 +286,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerControls_Swing;
     private readonly InputAction m_PlayerControls_Movement;
     private readonly InputAction m_PlayerControls_Sprint;
+    private readonly InputAction m_PlayerControls_Aim;
     public struct PlayerControlsActions
     {
         private @PlayerActions m_Wrapper;
@@ -262,6 +294,7 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         public InputAction @Swing => m_Wrapper.m_PlayerControls_Swing;
         public InputAction @Movement => m_Wrapper.m_PlayerControls_Movement;
         public InputAction @Sprint => m_Wrapper.m_PlayerControls_Sprint;
+        public InputAction @Aim => m_Wrapper.m_PlayerControls_Aim;
         public InputActionMap Get() { return m_Wrapper.m_PlayerControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -280,6 +313,9 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                 @Sprint.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnSprint;
                 @Sprint.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnSprint;
                 @Sprint.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnSprint;
+                @Aim.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAim;
+                @Aim.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAim;
+                @Aim.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAim;
             }
             m_Wrapper.m_PlayerControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -293,6 +329,9 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                 @Sprint.started += instance.OnSprint;
                 @Sprint.performed += instance.OnSprint;
                 @Sprint.canceled += instance.OnSprint;
+                @Aim.started += instance.OnAim;
+                @Aim.performed += instance.OnAim;
+                @Aim.canceled += instance.OnAim;
             }
         }
     }
@@ -320,5 +359,6 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         void OnSwing(InputAction.CallbackContext context);
         void OnMovement(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
     }
 }
