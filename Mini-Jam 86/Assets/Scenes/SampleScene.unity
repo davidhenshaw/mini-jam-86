@@ -323,8 +323,8 @@ GameObject:
   - component: {fileID: 262196855}
   - component: {fileID: 262196857}
   - component: {fileID: 262196856}
-  m_Layer: 0
-  m_Name: Player 1 Bound
+  m_Layer: 11
+  m_Name: Down Bound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -382,7 +382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11e40a94c5689c941a491724f570dc73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 954322811}
+  _player: {fileID: 1182934670}
 --- !u!1 &374936515
 GameObject:
   m_ObjectHideFlags: 0
@@ -393,7 +393,7 @@ GameObject:
   m_Component:
   - component: {fileID: 374936517}
   - component: {fileID: 374936516}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Court
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1324,7 +1324,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d43fa07534cfa842bcb96824750ba6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxBounces: 3
+  _maxBounces: 1
   _player1: {fileID: 954322811}
   _player2: {fileID: 1182934670}
 --- !u!4 &1147342885
@@ -1813,8 +1813,8 @@ GameObject:
   - component: {fileID: 2014304488}
   - component: {fileID: 2014304490}
   - component: {fileID: 2014304489}
-  m_Layer: 0
-  m_Name: Player 2 Bound
+  m_Layer: 11
+  m_Name: Up Bound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1872,4 +1872,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11e40a94c5689c941a491724f570dc73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 1182934670}
+  _player: {fileID: 954322811}
