@@ -10,6 +10,8 @@ namespace metakazz{
         Rigidbody2D _rigidbody;
         Racket _racket;
         Vector2 _direction;
+        [SerializeField] Team _team;
+        public Team Team => _team;
 
         [SerializeField] float moveSpeed = 2;
         [SerializeField] float moveAccel = 10;
@@ -25,6 +27,16 @@ namespace metakazz{
         private void Start()
         {
             _racket.SetCollidersEnabled(false);
+        }
+
+        private void OnDisable()
+        {
+            _team.RemovePlayer(this);
+        }
+
+        private void OnEnable()
+        {
+            _team.AddPlayer(this);
         }
 
         private void Update()

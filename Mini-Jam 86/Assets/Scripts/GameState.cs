@@ -2,23 +2,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace metakazz{
 
     public class Scoreboard
     {
-        Dictionary<PlayerController, int> _scoreboard = new Dictionary<PlayerController, int>();
+        Dictionary<Team, int> _scoreboard = new Dictionary<Team, int>();
 
-        public Scoreboard(ICollection<PlayerController> players)
+        public Scoreboard(ICollection<Team> players)
         {
 
-            foreach(PlayerController pc in players)
+            foreach(Team pc in players)
             {
                 _scoreboard.Add(pc, 0);
             }
         }
 
-        public void UpdatePoints(PlayerController p, int value)
+        public void UpdatePoints(Team p, int value)
         {
             _scoreboard[p] += value;
         }
@@ -32,9 +33,11 @@ namespace metakazz{
         }
     }
 
-
     public class GameState : MonoBehaviour
     {
+        private static GameState instance;
+        public static GameState Instance => instance;
+
         public static event Action<GameState> Created;
         public static event Action<GameState> Destroyed;
 
@@ -50,13 +53,15 @@ namespace metakazz{
         public int _maxBounces = 1;
         public int MaxBounces { get; }
         bool _ballIsLive = true;
-        public PlayerController _player1;
-        int _player1Score;
-        public PlayerController _player2;
-        int _player2Score;
+
+        [SerializeField] Team _team1;
+        public Team Team1 => _team1;
+        [SerializeField] Team _team2;
+        public Team Team2 => _team2;
+
         Scoreboard _scoreboard;
 
-        PlayerController Server
+        Team Server
         {
             get { return _server; }
             set
@@ -66,8 +71,8 @@ namespace metakazz{
             }
         }
 
-        PlayerController _server;
-        PlayerController _receiver;
+        Team _server;
+        Team _receiver;
 
         public event Action<int> BouncesChanged;
         public event Action<bool> MaxBouncesReached;
@@ -75,30 +80,56 @@ namespace metakazz{
 
         private void Awake()
         {
-            SubscribeEvents();
-            Created?.Invoke(this);
+            if(!instance)
+            {
+                instance = this;
+                SubscribeEvents();
+                Created?.Invoke(this);
+                DontDestroyOnLoad(this);
+            }
+            else
+            {
+                Destroy(this);
+            }
         }
 
         private void Start()
         {
-            _scoreboard = new Scoreboard(new PlayerController[]{ _player1, _player2 });
-            _server = _player1;
-            _receiver = _player2;
-
+            _scoreboard = new Scoreboard(new Team[]{ _team1, _team2 });
+            _server = _team1;
+            _receiver = _team2;
             Bounces = 0;
             MaxBouncesReached?.Invoke(false);
         }
 
         void SubscribeEvents()
         {
+            SceneManager.sceneLoaded += OnSceneLoad;
             Ball.Bounced += OnBounce;
             Racket.BallHit += OnRacketHit;
+        }
+
+        private void OnSceneLoad(Scene scene, LoadSceneMode mode)
+        {
+            if(scene.name == SceneLoader.Instance.MainGame.name)
+            {
+                ResetRound();
+            }
+        }
+
+        void ResetRound()
+        {
+            _ballIsLive = true;
+            _server = _team1;
+            _receiver = _team2;
+            Bounces = 0;
+            MaxBouncesReached?.Invoke(false);
         }
 
         private void OnRacketHit(Racket racket)
         {
             ResetBounces();
-            Server = racket.Player;
+            Server = racket.Player.Team;
             Debug.Log("Racket Hit: " + _server.name);
         }
 
@@ -111,7 +142,7 @@ namespace metakazz{
 
             CourtBound bounds = collider.GetComponent<CourtBound>();
 
-            return (bounds.Player != Server);
+            return (bounds.Team != Server);
         }
 
         void ResetBounces()

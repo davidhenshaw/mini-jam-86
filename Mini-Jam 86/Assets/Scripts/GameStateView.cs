@@ -8,12 +8,14 @@ namespace metakazz{
     public class GameStateView : MonoBehaviour
     {
         public TMP_Text _bounceView;
-
-        public TMP_Text _player1Score;
-        public TMP_Text _player2Score;
-
         public Color _bounceViewColor;
         public Color _maxBouncesColor;
+        [Space]
+        public TMP_Text _player1Label;
+        public TMP_Text _player1Score;
+        [Space]
+        public TMP_Text _player2Label;
+        public TMP_Text _player2Score;
 
         private void Awake()
         {
@@ -25,6 +27,9 @@ namespace metakazz{
             gameState.BouncesChanged += OnBounce;
             gameState.MaxBouncesReached += OnMaxBounces;
             gameState.ScoreChanged += OnScore;
+
+            _player1Label.text = gameState.Team1.TeamName;
+            _player2Label.text = gameState.Team2.TeamName;
         }
 
         private void OnScore(Scoreboard scoreboard)

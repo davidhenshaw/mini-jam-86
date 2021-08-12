@@ -5,7 +5,7 @@ using UnityEngine;
 namespace metakazz{
     public class CourtBound : MonoBehaviour
     {
-        [SerializeField] PlayerController _player;
-        public PlayerController Player => _player;
+        [SerializeField] Team _team;
+        public Team Team => _team;
     }
 }
