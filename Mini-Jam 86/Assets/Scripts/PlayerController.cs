@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace metakazz{
+    [RequireComponent(typeof(Rigidbody2D))]
     public class PlayerController : MonoBehaviour
     {
         Rigidbody2D _rigidbody;

@@ -6,6 +6,8 @@ using System;
 namespace metakazz{
     public class Racket : MonoBehaviour
     {
+        PlayerController _player;
+        public PlayerController Player => _player;
         BEUCollider _beuCollider;
         [SerializeField] float _hitPower = 3;
         [SerializeField] Vector3 _hitDir;
@@ -16,6 +18,7 @@ namespace metakazz{
         private void Awake()
         {
             _beuCollider = GetComponent<BEUCollider>();
+            _player = GetComponentInParent<PlayerController>();
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
