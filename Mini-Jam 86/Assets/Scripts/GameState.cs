@@ -60,6 +60,8 @@ namespace metakazz{
         public static event Action<GameState> Created;
         public static event Action<GameState> Destroyed;
 
+        [SerializeField] InputAction accept;
+        [Space]
         int _bounces = 0;
         public int Bounces
         {
@@ -119,11 +121,23 @@ namespace metakazz{
 
         private void Start()
         {
+            accept.performed += NextRound;
+
             _scoreboard = new Scoreboard(new Team[]{ _team1, _team2 });
             _server = _team1;
             _receiver = _team2;
             Bounces = 0;
             MaxBouncesReached?.Invoke(false);
+        }
+
+        private void OnDisable()
+        {
+            accept.Disable();    
+        }
+
+        private void OnEnable()
+        {
+            accept.Enable();
         }
 
         public bool IsInBounds(Vector2 point)
@@ -146,7 +160,7 @@ namespace metakazz{
 
         public void NextRound(InputAction.CallbackContext context )
         {
-            if(context.started && !_ballIsLive)
+            if(!_ballIsLive)
             {
                 LoadNextRound?.Invoke();
             }
