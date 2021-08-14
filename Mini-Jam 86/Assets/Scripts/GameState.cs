@@ -33,6 +33,24 @@ namespace metakazz{
         }
     }
 
+    public struct GameInfo
+    {
+        public readonly Scoreboard scoreboard;
+        public readonly bool ballIsLive;
+        public readonly Team server;
+        public readonly Team receiver;
+        public readonly Team winner;
+
+        public GameInfo(Scoreboard s, bool ballLive, Team w, Team svr, Team rcv)
+        {
+            scoreboard = s;
+            ballIsLive = ballLive;
+            server = svr;
+            receiver = rcv;
+            winner = w;
+        }
+    }
+
     public class GameState : MonoBehaviour
     {
         private static GameState instance;
@@ -53,7 +71,9 @@ namespace metakazz{
         public int _maxBounces = 1;
         public int MaxBounces { get; }
         bool _ballIsLive = true;
-
+        [Space]
+        public float transitionTime = 2;
+        [Space]
         [SerializeField] Team _team1;
         public Team Team1 => _team1;
         [SerializeField] Team _team2;
@@ -73,10 +93,12 @@ namespace metakazz{
 
         Team _server;
         Team _receiver;
+        Team _winner;
 
         public event Action<int> BouncesChanged;
         public event Action<bool> MaxBouncesReached;
-        public event Action<Scoreboard> ScoreChanged;
+        public event Action<GameInfo> ScoreChanged;
+        public event Action NextRoundReady;
 
         private void Awake()
         {
@@ -102,37 +124,6 @@ namespace metakazz{
             MaxBouncesReached?.Invoke(false);
         }
 
-        void SubscribeEvents()
-        {
-            SceneManager.sceneLoaded += OnSceneLoad;
-            Ball.Bounced += OnBounce;
-            Racket.BallHit += OnRacketHit;
-        }
-
-        private void OnSceneLoad(Scene scene, LoadSceneMode mode)
-        {
-            if(scene.name == SceneLoader.Instance.MainGame.name)
-            {
-                ResetRound();
-            }
-        }
-
-        void ResetRound()
-        {
-            _ballIsLive = true;
-            _server = _team1;
-            _receiver = _team2;
-            Bounces = 0;
-            MaxBouncesReached?.Invoke(false);
-        }
-
-        private void OnRacketHit(Racket racket)
-        {
-            ResetBounces();
-            Server = racket.Player.Team;
-            Debug.Log("Racket Hit: " + _server.name);
-        }
-
         public bool IsInBounds(Vector2 point)
         {
             var collider = Physics2D.OverlapPoint(point, LayerMask.GetMask("Court"));
@@ -145,10 +136,58 @@ namespace metakazz{
             return (bounds.Team != Server);
         }
 
+        public GameInfo GetGameInfo()
+        {
+            var info = new GameInfo(_scoreboard, _ballIsLive, _winner, _server, _receiver);
+            return info;
+        }
+
+        void SubscribeEvents()
+        {
+            SceneManager.sceneLoaded += OnSceneLoad;
+            Ball.Bounced += OnBounce;
+            Racket.BallHit += OnRacketHit;
+        }
+
+        void OnSceneLoad(Scene scene, LoadSceneMode mode)
+        {
+            if(scene.name == SceneLoader.Instance.MainGame.name)
+            {
+                ResetRound();
+            }
+        }
+
+        void ResetRound()
+        {
+            _ballIsLive = true;
+            _server = _team1;
+            _receiver = _team2;
+            _winner = null;
+            Bounces = 0;
+            MaxBouncesReached?.Invoke(false);
+        }
+
+        void OnRacketHit(Racket racket)
+        {
+            ResetBounces();
+            Server = racket.Player.Team;
+            Debug.Log("Racket Hit: " + _server.name);
+        }
+
         void ResetBounces()
         {
             Bounces = 0;
             MaxBouncesReached?.Invoke(false);
+        }
+
+        void SetWinner(Team team)
+        {
+            _winner = team;
+            _scoreboard.UpdatePoints(team, 1);
+            ScoreChanged?.Invoke(GetGameInfo());
+            _ballIsLive = false;
+
+            StartCoroutine(RoundEnd_co(transitionTime));
         }
 
         void Judge(Vector3 position)
@@ -156,18 +195,12 @@ namespace metakazz{
             // If the server hits out of bounds, the receiver wins
             if (!IsInBounds(position) && Bounces == 0)
             {
-                _scoreboard.UpdatePoints(_receiver, 1);
-                ScoreChanged?.Invoke(_scoreboard);
-                _ballIsLive = false;
-
+                SetWinner(_receiver);
                 return;
             }
             else if( !IsInBounds(position) && Bounces > 0)
             {// If any subsequent bounce is out of bounds, the server wins
-                _scoreboard.UpdatePoints(Server, 1);
-                ScoreChanged?.Invoke(_scoreboard);
-                _ballIsLive = false;
-
+                SetWinner(_server);
                 return;
             }
 
@@ -175,10 +208,7 @@ namespace metakazz{
             if (Bounces >= _maxBounces)
             {
                 MaxBouncesReached?.Invoke(true);
-
-                _scoreboard.UpdatePoints(Server, 1);
-                ScoreChanged?.Invoke(_scoreboard);
-                _ballIsLive = false;
+                SetWinner(_server);
             }
 
         }
@@ -192,5 +222,12 @@ namespace metakazz{
 
             Bounces++;
         }
+
+        IEnumerator RoundEnd_co(float waitTime)
+        {
+            yield return new WaitForSecondsRealtime(waitTime);
+            NextRoundReady?.Invoke();
+        }
+
     }
 }

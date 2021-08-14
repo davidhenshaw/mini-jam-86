@@ -35,6 +35,11 @@ namespace metakazz{
             }
         }
 
+        private void Start()
+        {
+            GameState.Instance.NextRoundReady += LoadGame;
+        }
+
         private void Update()
         {
             if(Keyboard.current.rKey.wasPressedThisFrame)
