@@ -16,6 +16,8 @@ namespace metakazz{
         [Space]
         public TMP_Text _player2Label;
         public TMP_Text _player2Score;
+        [Space]
+        public TMP_Text _alertText;
 
         private void Awake()
         {
@@ -26,6 +28,7 @@ namespace metakazz{
         {
             gameState.BouncesChanged += OnBounce;
             gameState.MaxBouncesReached += OnMaxBounces;
+
             gameState.ScoreChanged += OnScore;
             gameState.ScoreChanged += OnRoundEnded;
             gameState.LoadNextRound += OnLoadNextRound;
@@ -34,12 +37,23 @@ namespace metakazz{
             _player2Label.text = gameState.Team2.TeamName;
         }
 
-        private void OnScore(Scoreboard scoreboard)
+        private void OnLoadNextRound()
         {
-            var scores = scoreboard.GetScores();
+            _alertText.enabled = false;
+        }
+
+        private void OnScore(GameInfo info)
+        {
+            var scores = info.scoreboard.GetScores();
 
             _player1Score.text = scores[0].ToString();
             _player2Score.text = scores[1].ToString();
+        }
+
+        void OnRoundEnded(GameInfo info)
+        {
+            _alertText.enabled = true;
+            _alertText.text = $"{info.winner.TeamName} Wins!";
         }
 
         private void OnMaxBounces(bool value)
