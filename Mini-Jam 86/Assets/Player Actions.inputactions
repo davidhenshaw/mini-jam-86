@@ -183,6 +183,55 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "GameStateControls",
+            "id": "28dc6bfd-eac4-4554-ab12-a84c44b3ddde",
+            "actions": [
+                {
+                    "name": "Accept",
+                    "type": "Button",
+                    "id": "02b4104e-9c02-418f-8204-50fc36258019",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "611ad146-9c38-42d3-b2f6-aba79df3b50c",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Accept",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c7be4061-c7d7-4e9a-9aa4-d631a6a906cb",
+                    "path": "<Pointer>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Accept",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5376653c-1bb1-4158-8f88-945da0f2e7b1",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Accept",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

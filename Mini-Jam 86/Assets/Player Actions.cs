@@ -196,6 +196,55 @@ public class @PlayerActions : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""GameStateControls"",
+            ""id"": ""28dc6bfd-eac4-4554-ab12-a84c44b3ddde"",
+            ""actions"": [
+                {
+                    ""name"": ""Accept"",
+                    ""type"": ""Button"",
+                    ""id"": ""02b4104e-9c02-418f-8204-50fc36258019"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""611ad146-9c38-42d3-b2f6-aba79df3b50c"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Accept"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c7be4061-c7d7-4e9a-9aa4-d631a6a906cb"",
+                    ""path"": ""<Pointer>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Accept"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5376653c-1bb1-4158-8f88-945da0f2e7b1"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Accept"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -234,6 +283,9 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         m_PlayerControls_Movement = m_PlayerControls.FindAction("Movement", throwIfNotFound: true);
         m_PlayerControls_Sprint = m_PlayerControls.FindAction("Sprint", throwIfNotFound: true);
         m_PlayerControls_Aim = m_PlayerControls.FindAction("Aim", throwIfNotFound: true);
+        // GameStateControls
+        m_GameStateControls = asset.FindActionMap("GameStateControls", throwIfNotFound: true);
+        m_GameStateControls_Accept = m_GameStateControls.FindAction("Accept", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -336,6 +388,39 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         }
     }
     public PlayerControlsActions @PlayerControls => new PlayerControlsActions(this);
+
+    // GameStateControls
+    private readonly InputActionMap m_GameStateControls;
+    private IGameStateControlsActions m_GameStateControlsActionsCallbackInterface;
+    private readonly InputAction m_GameStateControls_Accept;
+    public struct GameStateControlsActions
+    {
+        private @PlayerActions m_Wrapper;
+        public GameStateControlsActions(@PlayerActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Accept => m_Wrapper.m_GameStateControls_Accept;
+        public InputActionMap Get() { return m_Wrapper.m_GameStateControls; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(GameStateControlsActions set) { return set.Get(); }
+        public void SetCallbacks(IGameStateControlsActions instance)
+        {
+            if (m_Wrapper.m_GameStateControlsActionsCallbackInterface != null)
+            {
+                @Accept.started -= m_Wrapper.m_GameStateControlsActionsCallbackInterface.OnAccept;
+                @Accept.performed -= m_Wrapper.m_GameStateControlsActionsCallbackInterface.OnAccept;
+                @Accept.canceled -= m_Wrapper.m_GameStateControlsActionsCallbackInterface.OnAccept;
+            }
+            m_Wrapper.m_GameStateControlsActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Accept.started += instance.OnAccept;
+                @Accept.performed += instance.OnAccept;
+                @Accept.canceled += instance.OnAccept;
+            }
+        }
+    }
+    public GameStateControlsActions @GameStateControls => new GameStateControlsActions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -360,5 +445,9 @@ public class @PlayerActions : IInputActionCollection, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+    }
+    public interface IGameStateControlsActions
+    {
+        void OnAccept(InputAction.CallbackContext context);
     }
 }

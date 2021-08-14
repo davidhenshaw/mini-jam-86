@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 namespace metakazz{
@@ -76,7 +77,9 @@ namespace metakazz{
 
         public event Action<int> BouncesChanged;
         public event Action<bool> MaxBouncesReached;
-        public event Action<Scoreboard> ScoreChanged;
+        public event Action<GameInfo> ScoreChanged;
+        public event Action LoadNextRound;
+        public event Action NextRoundReady;
 
         private void Awake()
         {
@@ -100,6 +103,32 @@ namespace metakazz{
             _receiver = _team2;
             Bounces = 0;
             MaxBouncesReached?.Invoke(false);
+        }
+
+        public bool IsInBounds(Vector2 point)
+        {
+            var collider = Physics2D.OverlapPoint(point, LayerMask.GetMask("Court"));
+
+            if (!collider)
+                return false;
+
+            CourtBound bounds = collider.GetComponent<CourtBound>();
+
+            return (bounds.Team != Server);
+        }
+
+        public GameInfo GetGameInfo()
+        {
+            var info = new GameInfo(_scoreboard, _ballIsLive, _winner, _server, _receiver);
+            return info;
+        }
+
+        public void NextRound(InputAction.CallbackContext context )
+        {
+            if(context.started && !_ballIsLive)
+            {
+                LoadNextRound?.Invoke();
+            }
         }
 
         void SubscribeEvents()

@@ -27,6 +27,8 @@ namespace metakazz{
             gameState.BouncesChanged += OnBounce;
             gameState.MaxBouncesReached += OnMaxBounces;
             gameState.ScoreChanged += OnScore;
+            gameState.ScoreChanged += OnRoundEnded;
+            gameState.LoadNextRound += OnLoadNextRound;
 
             _player1Label.text = gameState.Team1.TeamName;
             _player2Label.text = gameState.Team2.TeamName;

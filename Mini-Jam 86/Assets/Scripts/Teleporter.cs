@@ -6,7 +6,6 @@ using UnityEngine;
 namespace metakazz{
     public class Teleporter : MonoBehaviour
     {
-        [SerializeField] Transform toTeleport;
         [SerializeField] Camera mainCamera;
 
         private void Awake()
@@ -20,7 +19,7 @@ namespace metakazz{
         // Update is called once per frame
         void Update()
         {
-            var viewPos = mainCamera.WorldToViewportPoint(toTeleport.position);
+            var viewPos = mainCamera.WorldToViewportPoint(transform.position);
 
             if(viewPos.y > 1)
             {
@@ -50,7 +49,7 @@ namespace metakazz{
         void TeleportObject(Vector2 viewportPos)
         {
             var worldPos = mainCamera.ViewportToWorldPoint(viewportPos);
-            toTeleport.position = new Vector3(worldPos.x, worldPos.y, toTeleport.position.z);
+            transform.position = new Vector3(worldPos.x, worldPos.y, transform.position.z);
         }
     }
 }
