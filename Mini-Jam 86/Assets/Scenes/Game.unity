@@ -1052,6 +1052,7 @@ GameObject:
   - component: {fileID: 954322812}
   - component: {fileID: 954322811}
   - component: {fileID: 954322813}
+  - component: {fileID: 954322814}
   m_Layer: 0
   m_Name: Player Up
   m_TagString: Untagged
@@ -1075,6 +1076,7 @@ MonoBehaviour:
   moveSpeed: 2
   moveAccel: 10
   moveDecel: 7
+  _swingDuration: 0.5
 --- !u!4 &954322812
 Transform:
   m_ObjectHideFlags: 0
@@ -1112,6 +1114,25 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!95 &954322814
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 954322810}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: db75e866d26457e4ea4173f44ec618f2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1128622818
 GameObject:
   m_ObjectHideFlags: 0
@@ -1320,7 +1341,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1147342885}
   - component: {fileID: 1147342884}
-  - component: {fileID: 1147342886}
   m_Layer: 0
   m_Name: Game State
   m_TagString: Untagged
@@ -1340,6 +1360,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d43fa07534cfa842bcb96824750ba6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  accept:
+    m_Name: Accept
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: c106a7a2-65c1-412d-adab-17dc9be78317
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 6db7b11a-cc52-48a9-a0c1-29a664941d70
+      m_Path: <Keyboard>/space
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Accept
+      m_Flags: 0
   _maxBounces: 1
   transitionTime: 2
   _team1: {fileID: 11400000, guid: 749252c1ad4f2bf43a53b6606e2126a3, type: 2}
@@ -1358,52 +1394,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1147342886
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1147342883}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: f13bf7d09cb688948b8f9d77ec876554,
-    type: 3}
-  m_NotificationBehavior: 2
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1147342884}
-        m_MethodName: NextRound
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: b120e030-9676-49ac-b806-eee08d11b8af
-    m_ActionName: GameplayControls/Accept[/Keyboard/space,/Mouse/leftButton]
-  m_NeverAutoSwitchControlSchemes: 1
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: GameplayControls
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!1 &1172304130
 GameObject:
   m_ObjectHideFlags: 0
@@ -1461,6 +1451,7 @@ GameObject:
   - component: {fileID: 1182934667}
   - component: {fileID: 1182934671}
   - component: {fileID: 1182934672}
+  - component: {fileID: 1182934673}
   m_Layer: 0
   m_Name: Player Down
   m_TagString: Untagged
@@ -1602,9 +1593,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _team: {fileID: 11400000, guid: 9cf1ac1e82431e04b9b9110b1a2aa3a3, type: 2}
-  moveSpeed: 5
+  moveSpeed: 3.55
   moveAccel: 15.45
   moveDecel: 11.47
+  _swingDuration: 0.5
 --- !u!61 &1182934671
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1621,10 +1613,10 @@ BoxCollider2D:
   m_Offset: {x: -0.014852643, y: -0.23764342}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.6, y: 0.64}
+    newSize: {x: 0.6, y: 0.64}
+    adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
@@ -1644,6 +1636,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 0}
+--- !u!95 &1182934673
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182934666}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a0eec55b2fa4f0d4c81b98143c217134, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1241148547
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,6 +10,7 @@ namespace metakazz{
         Rigidbody2D _rigidbody;
         Racket _racket;
         Vector2 _direction;
+        Animator _animator;
         [SerializeField] Team _team;
         public Team Team => _team;
 
@@ -17,11 +18,13 @@ namespace metakazz{
         [SerializeField] float moveAccel = 10;
         [SerializeField] float moveDecel = 7;
         float minVelocity = 0.01f;
+        [SerializeField] float _swingDuration = 0.5f;
 
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
             _racket = GetComponentInChildren<Racket>();
+            _animator = GetComponent<Animator>();
         }
 
         private void Start()
@@ -58,19 +61,40 @@ namespace metakazz{
 
             _rigidbody.velocity += moveVector;
             _rigidbody.velocity = Vector2.ClampMagnitude(_rigidbody.velocity, moveSpeed);
+            _animator.SetFloat("moveDir", _rigidbody.velocity.y);
         }
 
         public void OnMovement(InputAction.CallbackContext value)
         {
-            _direction = value.ReadValue<Vector2>();
+            Move(value.ReadValue<Vector2>());
+
+            if(value.started)
+            {
+                _animator.SetBool("isMoving", true);
+            }
+            else if(value.canceled)
+            {
+                _animator.SetBool("isMoving", false);
+            }
+        }
+
+        public void Move(Vector2 direction)
+        {
+            _direction = direction;
         }
 
         public void OnSwing(InputAction.CallbackContext value)
         {
             if(value.started)
             {
-                StartCoroutine(ActivateRacket(1));
+                Swing();
             }
+        }
+
+        public void Swing()
+        {
+            StartCoroutine(ActivateRacket(_swingDuration));
+            _animator.SetTrigger("fwdSwing");
         }
 
         public void OnAimAxis(InputAction.CallbackContext value)
