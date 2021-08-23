@@ -19,9 +19,9 @@ namespace metakazz{
         [Space]
         public TMP_Text _alertText;
 
-        private void Awake()
+        private void Start()
         {
-            GameState.Created += Bind;   
+            Bind(GameState.Instance);   
         }
 
         public void Bind(GameState gameState)
